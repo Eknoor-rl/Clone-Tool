@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rocketlane Clone Tool</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <div class="brand">
+                    <span class="logo">🚀</span>
+                </div>
+                <h1>Rocketlane Clone Tool</h1>
+                <p class="subtitle">Seamlessly clone your portal configuration between environments with precision and confidence</p>
+            </div>
+        </header>
+
+        <!-- Main Form -->
+        <form id="cloneForm" class="clone-form">
+            <!-- Source Portal Section -->
+            <div class="portal-section source-section">
+                <div class="section-header">
+                    <div class="section-icon">📤</div>
+                    <h2>Source Portal</h2>
+                </div>
+                <p class="section-description">Configure the portal you want to clone configuration from</p>
+
+                <div class="form-group">
+                    <label for="source_name">Portal Name</label>
+                    <input type="text" id="source_name" name="source_name" value="Source Portal" placeholder="e.g., High Radius Prod" required>
+                    <small>Display name of the source portal</small>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="source_base_url">Base URL</label>
+                        <input type="url" id="source_base_url" name="source_base_url" placeholder="https://your-source.rocketlane.com" required>
+                        <small>Example: https://pogboom1.rocketlane.com</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="source_v1_api_base">V1 API Base URL</label>
+                        <input type="url" id="source_v1_api_base" name="source_v1_api_base" placeholder="https://your-source.api.rocketlane.com" required>
+                        <small>Example: https://pogboom1.api.rocketlane.com</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="source_api_key">API Key</label>
+                        <input type="password" id="source_api_key" name="source_api_key" placeholder="rl-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" required>
+                        <small>Your source portal API authentication key</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="source_automation_api_key">Automation API Key (Optional)</label>
+                        <input type="password" id="source_automation_api_key" name="source_automation_api_key" placeholder="Leave empty to use main API key">
+                        <small>Only needed if different from main API key</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Destination Portal Section -->
+            <div class="portal-section destination-section">
+                <div class="section-header">
+                    <div class="section-icon">📥</div>
+                    <h2>Destination Portal</h2>
+                </div>
+                <p class="section-description">Configure the portal you want to clone configuration to</p>
+
+                <div class="form-group">
+                    <label for="destination_name">Portal Name</label>
+                    <input type="text" id="destination_name" name="destination_name" value="Destination Portal" placeholder="e.g., High Radius Sandbox" required>
+                    <small>Display name of the destination portal</small>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="destination_base_url">Base URL</label>
+                        <input type="url" id="destination_base_url" name="destination_base_url" placeholder="https://your-destination.rocketlane.com" required>
+                        <small>Example: https://pogboom.rocketlane.com</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="destination_api_base">API Base URL</label>
+                        <input type="url" id="destination_api_base" name="destination_api_base" placeholder="https://your-destination.api.rocketlane.com" required>
+                        <small>Example: https://pogboom.api.rocketlane.com</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="destination_api_key">API Key</label>
+                    <input type="password" id="destination_api_key" name="destination_api_key" placeholder="rl-xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" required>
+                    <small>Your destination portal API authentication key</small>
+                </div>
+            </div>
+
+            <!-- Clone Options Section -->
+            <div class="options-section">
+                <div class="section-header">
+                    <div class="section-icon">⚙️</div>
+                    <h2>Clone Options</h2>
+                </div>
+                <p class="section-description">Select which components to clone between portals</p>
+
+                <div class="clone-options">
+                    <!-- Fields Card -->
+                    <div class="checkbox-card">
+                        <input type="checkbox" id="enable_fields" name="enable_fields">
+                        <label for="enable_fields">
+                            <div class="checkbox-icon"></div>
+                            <div class="checkbox-label">
+                                <strong>Fields</strong>
+                                <span>Custom fields - maps existing, creates new</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Roles Card -->
+                    <div class="checkbox-card">
+                        <input type="checkbox" id="enable_roles" name="enable_roles">
+                        <label for="enable_roles">
+                            <div class="checkbox-icon"></div>
+                            <div class="checkbox-label">
+                                <strong>Roles</strong>
+                                <span>Maps existing roles, creates new ones</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Skills Card -->
+                    <div class="checkbox-card">
+                        <input type="checkbox" id="enable_skills" name="enable_skills">
+                        <label for="enable_skills">
+                            <div class="checkbox-icon"></div>
+                            <div class="checkbox-label">
+                                <strong>Skills</strong>
+                                <span>Maps existing skills, creates new ones</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Templates Card -->
+                    <div class="checkbox-card">
+                        <input type="checkbox" id="enable_templates" name="enable_templates">
+                        <label for="enable_templates">
+                            <div class="checkbox-icon"></div>
+                            <div class="checkbox-label">
+                                <strong>Templates</strong>
+                                <span>Project/task templates with field ID remapping and dependencies</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Automations Card -->
+                    <div class="checkbox-card">
+                        <input type="checkbox" id="enable_automations" name="enable_automations">
+                        <label for="enable_automations">
+                            <div class="checkbox-icon"></div>
+                            <div class="checkbox-label">
+                                <strong>Automations</strong>
+                                <span>Created in DISABLED state for manual review</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Timesheets Card -->
+                    <div class="checkbox-card">
+                        <input type="checkbox" id="enable_timesheets" name="enable_timesheets">
+                        <label for="enable_timesheets">
+                            <div class="checkbox-icon"></div>
+                            <div class="checkbox-label">
+                                <strong>Timesheets</strong>
+                                <span>Configuration, categories, and activities</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Field Type Selectors (separate section, appears when Fields is checked) -->
+                    <div id="fieldTypesSelector" class="field-types-section" style="grid-column: 1 / -1; display: none;">
+                        <div class="field-types-header-bar">
+                            <span class="field-types-icon">📋</span>
+                            <span>Field Types to Clone</span>
+                        </div>
+                        <div class="field-types-cards">
+                            <!-- TASK Fields Card -->
+                            <div class="checkbox-card checkbox-card-compact">
+                                <input type="checkbox" id="enable_fields_task" name="enable_fields_task" checked>
+                                <label for="enable_fields_task">
+                                    <div class="checkbox-icon"></div>
+                                    <div class="checkbox-label">
+                                        <strong>TASK</strong>
+                                        <span>Task custom fields</span>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <!-- PROJECT Fields Card -->
+                            <div class="checkbox-card checkbox-card-compact">
+                                <input type="checkbox" id="enable_fields_project" name="enable_fields_project" checked>
+                                <label for="enable_fields_project">
+                                    <div class="checkbox-icon"></div>
+                                    <div class="checkbox-label">
+                                        <strong>PROJECT</strong>
+                                        <span>Project custom fields</span>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <!-- USER Fields Card -->
+                            <div class="checkbox-card checkbox-card-compact">
+                                <input type="checkbox" id="enable_fields_user" name="enable_fields_user" checked>
+                                <label for="enable_fields_user">
+                                    <div class="checkbox-icon"></div>
+                                    <div class="checkbox-label">
+                                        <strong>USER</strong>
+                                        <span>User custom fields</span>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <!-- COMPANY Fields Card -->
+                            <div class="checkbox-card checkbox-card-compact">
+                                <input type="checkbox" id="enable_fields_company" name="enable_fields_company" checked>
+                                <label for="enable_fields_company">
+                                    <div class="checkbox-icon"></div>
+                                    <div class="checkbox-label">
+                                        <strong>COMPANY</strong>
+                                        <span>Company custom fields</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dry Run Card (Special styling) -->
+                <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(245, 158, 11, 0.03) 100%); border: 2px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-xl); padding: var(--space-xl); margin-bottom: var(--space-lg); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);">
+                    <div class="checkbox-card" style="margin: 0;">
+                        <input type="checkbox" id="dry_run" name="dry_run">
+                        <label for="dry_run" style="background: white;">
+                            <div class="checkbox-icon"></div>
+                            <div class="checkbox-label">
+                                <strong>🧪 Dry Run Mode</strong>
+                                <span>Test the clone without making any changes. Highly recommended for first run!</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%); border: 2px solid var(--color-warning); border-radius: var(--radius-md); padding: var(--space-lg); margin-top: var(--space-lg);">
+                    <p style="margin: 0; font-size: 0.9375rem; line-height: 1.6; color: var(--color-gray-700);">
+                        <strong>⏱️ Clone Duration:</strong> Large clones (300+ fields) may take 10-20 minutes.
+                        The browser will wait up to 2 hours for completion. <strong>Don't close this window during cloning.</strong>
+                    </p>
+                    <p style="margin: 8px 0 0 0; font-size: 0.875rem; color: var(--color-gray-600);">
+                        <strong>Note:</strong> Users are not cloned automatically. Automations will be created in DISABLED state - review and enable them manually after cloning.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Submit Section -->
+            <div class="submit-section">
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <span id="btnText">🚀 Run Clone</span>
+                    <span id="btnSpinner" class="spinner" style="display:none;">⏳</span>
+                </button>
+                <p class="warning-text">⚠️ This operation may take several minutes. Please do not close this page.</p>
+            </div>
+        </form>
+
+        <!-- Clone Status (Hidden initially) -->
+        <div id="migrationStatus" class="migration-status" style="display:none;">
+            <h3>
+                <span>Clone Progress</span>
+                <span id="statusBadge" class="status-badge running">
+                    <span class="spinner">⏳</span>
+                    <span>Running</span>
+                </span>
+            </h3>
+
+            <div class="status-info">
+                <div class="status-item">
+                    <div class="status-item-label">Phase</div>
+                    <div class="status-item-value" id="statusPhase">Starting...</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-item-label">Elapsed Time</div>
+                    <div class="status-item-value" id="statusElapsed">0s</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-item-label">Status</div>
+                    <div class="status-item-value" id="statusText">Initializing...</div>
+                </div>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Results Section (Hidden initially) -->
+        <div id="resultsSection" class="results-section" style="display:none;">
+            <h2>Clone Results</h2>
+            <div id="resultsContent"></div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p style="font-family: var(--font-display); font-size: 1.0625rem; font-weight: 600; color: var(--color-primary); letter-spacing: -0.01em; margin-bottom: 0.375rem;">Clone smarter, not harder • v1.0</p>
+            <p style="font-size: 0.875rem; color: var(--color-gray-500);">Built with ❤️ for <a href="https://rocketlane.com" target="_blank">Rocketlane</a></p>
+        </footer>
+    </div>
+
+    <!-- Ask AI Button -->
+    <button class="ask-ai-button" id="askAiButton" title="Ask AI about the Clone Tool">
+        🤖
+    </button>
+
+    <!-- Ask AI Modal -->
+    <div class="ask-ai-modal" id="askAiModal">
+        <div class="ask-ai-content">
+            <div class="ask-ai-header">
+                <h3>
+                    <span>🤖</span>
+                    <span>Ask AI Assistant</span>
+                </h3>
+                <button class="ask-ai-close" id="askAiClose">×</button>
+            </div>
+            <div class="ask-ai-messages" id="askAiMessages">
+                <div class="ai-welcome">
+                    <div class="ai-welcome-icon">🤖</div>
+                    <h4>AI Assistant</h4>
+                    <p>Ask me anything about the Rocketlane Clone Tool!</p>
+                    <p style="margin-top: var(--space-md); font-size: 0.875rem;">
+                        Example questions:<br>
+                        • What does this tool do?<br>
+                        • Explain the workflow step by step<br>
+                        • What edge cases are handled?<br>
+                        • What problems have been solved?<br>
+                        • How does deduplication work?<br>
+                        • Can I clone multiple customers?<br>
+                        • I have 400 fields, how long will it take?<br>
+                        • What happens if Status field is deleted?<br>
+                        • How does incremental cloning work?
+                    </p>
+                </div>
+            </div>
+            <div class="ask-ai-input-area">
+                <textarea
+                    class="ask-ai-input"
+                    id="askAiInput"
+                    placeholder="Ask a question about the Clone Tool..."
+                    rows="2"
+                ></textarea>
+                <button class="ask-ai-send" id="askAiSend">
+                    <span id="askAiSendText">Send</span>
+                    <span id="askAiSendSpinner" style="display: none;">⏳</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('cloneForm');
+        const resultsSection = document.getElementById('resultsSection');
+        const resultsContent = document.getElementById('resultsContent');
+        const migrationStatus = document.getElementById('migrationStatus');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnSpinner = document.getElementById('btnSpinner');
+
+        let startTime;
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Disable submit button
+            submitBtn.disabled = true;
+            btnText.textContent = '🔄 Starting...';
+            btnSpinner.style.display = 'inline-block';
+
+            // Show migration status, hide results
+            migrationStatus.style.display = 'block';
+            resultsSection.style.display = 'none';
+
+            // Reset status display
+            document.getElementById('statusPhase').textContent = 'Starting...';
+            document.getElementById('statusElapsed').textContent = '0s';
+            document.getElementById('statusText').textContent = 'Initializing...';
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('statusBadge').className = 'status-badge running';
+            document.getElementById('statusBadge').innerHTML = '<span class="spinner">⏳</span><span>Running</span>';
+
+            // Collect form data
+            const templatesEnabled = document.getElementById('enable_templates').checked;
+            const formData = {
+                source_name: document.getElementById('source_name').value,
+                source_base_url: document.getElementById('source_base_url').value,
+                source_v1_api_base: document.getElementById('source_v1_api_base').value,
+                source_api_key: document.getElementById('source_api_key').value,
+                source_automation_api_key: document.getElementById('source_automation_api_key').value,
+                destination_name: document.getElementById('destination_name').value,
+                destination_base_url: document.getElementById('destination_base_url').value,
+                destination_api_base: document.getElementById('destination_api_base').value,
+                destination_api_key: document.getElementById('destination_api_key').value,
+                dry_run: document.getElementById('dry_run').checked,
+                // Migration feature flags
+                enable_fields: document.getElementById('enable_fields').checked,
+                enable_fields_task: document.getElementById('enable_fields_task').checked,
+                enable_fields_project: document.getElementById('enable_fields_project').checked,
+                enable_fields_user: document.getElementById('enable_fields_user').checked,
+                enable_fields_company: document.getElementById('enable_fields_company').checked,
+                enable_roles: document.getElementById('enable_roles').checked,
+                enable_skills: document.getElementById('enable_skills').checked,
+                enable_templates: templatesEnabled,
+                enable_dependencies: templatesEnabled,  // Merged with templates
+                enable_automations: document.getElementById('enable_automations').checked,
+                enable_timesheets: document.getElementById('enable_timesheets').checked
+            };
+
+            try {
+                // Start migration
+                startTime = Date.now();
+                const startResponse = await fetch('/run-migration', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const startResult = await startResponse.json();
+
+                if (startResult.status === 'error') {
+                    throw new Error(startResult.message || 'Failed to start clone');
+                }
+
+                // Scroll to status
+                migrationStatus.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Declare timeout variable in outer scope
+                let pollingTimeout;
+
+                // Poll for status every 2 seconds
+                const pollInterval = setInterval(async () => {
+                    try {
+                        const statusResponse = await fetch('/migration-status');
+                        const statusData = await statusResponse.json();
+
+                        if (statusData.status === 'running') {
+                            updateStatusDisplay(statusData);
+                        } else if (statusData.status === 'complete') {
+                            clearInterval(pollInterval);
+                            clearTimeout(pollingTimeout);
+
+                            // Final status update
+                            updateStatusDisplay({ ...statusData, phase: 'completed' });
+
+                            // Show results after a brief delay
+                            setTimeout(() => {
+                                displayResults(statusData.result);
+                            }, 500);
+
+                            // Re-enable submit button
+                            resetButton();
+                        }
+                    } catch (pollError) {
+                        console.error('Polling error:', pollError);
+                    }
+                }, 2000);
+
+                // Set max polling time (2 hours)
+                pollingTimeout = setTimeout(() => {
+                    clearInterval(pollInterval);
+                    showError('Polling timeout after 2 hours. Clone may still be running. Check server logs.');
+                    resetButton();
+                }, 2 * 60 * 60 * 1000);
+
+            } catch (error) {
+                showError(error.message);
+                resetButton();
+            }
+        });
+
+        function updateStatusDisplay(statusData) {
+            // Update elapsed time
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            document.getElementById('statusElapsed').textContent =
+                minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+
+            // Update phase
+            const phase = statusData.progress?.phase || statusData.phase || 'Processing';
+            document.getElementById('statusPhase').textContent = phase;
+
+            // Update status text
+            document.getElementById('statusText').textContent =
+                statusData.status === 'running' ? 'Running...' : statusData.status;
+
+            // Update progress bar
+            const progressMap = {
+                'starting': 10,
+                'connecting': 20,
+                'fetching': 40,
+                'mapping': 60,
+                'creating': 80,
+                'completing': 95,
+                'completed': 100
+            };
+            const progress = progressMap[phase.toLowerCase()] || 50;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            // Update badge
+            const badge = document.getElementById('statusBadge');
+            if (phase.toLowerCase() === 'completed' || statusData.status === 'complete') {
+                badge.className = 'status-badge success';
+                badge.innerHTML = '<span>✅</span><span>Complete</span>';
+            }
+        }
+
+        function displayResults(result) {
+            // Hide status, show results
+            migrationStatus.style.display = 'none';
+            resultsSection.style.display = 'block';
+
+            const statusClass = result.status === 'success' ? 'success-box' : 'error-box';
+            const statusIcon = result.status === 'success' ? '✅' : '❌';
+            const modeText = result.dry_run ? '🧪 DRY RUN' : '🚀 LIVE CLONE';
+
+            let html = `
+                <div class="${statusClass}">
+                    <h3>${statusIcon} ${result.status.toUpperCase()}</h3>
+                    <p style="margin: 8px 0 0 0;"><strong>Mode:</strong> ${modeText}</p>
+                    <p style="margin: 4px 0 0 0;"><strong>Timestamp:</strong> ${result.timestamp}</p>
+                </div>
+
+                <div class="output-box">
+                    <h3>📊 Clone Log</h3>
+                    <pre>${result.output || 'No output available'}</pre>
+                </div>
+            `;
+
+            if (result.mappings && Object.keys(result.mappings).length > 0) {
+                html += `
+                    <div class="mappings-box">
+                        <h3>📁 Generated Mapping Files</h3>
+                        <ul class="download-list">
+                `;
+
+                for (const [filename, data] of Object.entries(result.mappings)) {
+                    const count = data.total_mappings || 0;
+                    html += `
+                        <li>
+                            <a href="/download/${filename}" class="download-link">
+                                ${filename}
+                            </a>
+                            <span class="mapping-count">${count} mappings</span>
+                        </li>
+                    `;
+                }
+
+                html += `
+                        </ul>
+                    </div>
+                `;
+            }
+
+            resultsContent.innerHTML = html;
+
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function showError(message) {
+            migrationStatus.style.display = 'none';
+            resultsSection.style.display = 'block';
+
+            resultsContent.innerHTML = `
+                <div class="error-box">
+                    <h3>❌ Error</h3>
+                    <p>${message}</p>
+                </div>
+                <div class="output-box">
+                    <h3>📊 Details</h3>
+                    <pre>Clone failed to start. Please check your configuration and try again.</pre>
+                </div>
+            `;
+
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function resetButton() {
+            submitBtn.disabled = false;
+            btnText.textContent = '🚀 Run Clone';
+            btnSpinner.style.display = 'none';
+        }
+
+        // ============================================================================
+        // INTERACTIVE FIELD TYPES SELECTOR
+        // ============================================================================
+        const enableFieldsCheckbox = document.getElementById('enable_fields');
+        const fieldTypesSelector = document.getElementById('fieldTypesSelector');
+
+        // Toggle field types selector when Fields checkbox changes
+        enableFieldsCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                fieldTypesSelector.style.display = 'block';
+            } else {
+                fieldTypesSelector.style.display = 'none';
+            }
+        });
+
+        // ============================================================================
+        // ASK AI FUNCTIONALITY
+        // ============================================================================
+        const askAiButton = document.getElementById('askAiButton');
+        const askAiModal = document.getElementById('askAiModal');
+        const askAiClose = document.getElementById('askAiClose');
+        const askAiInput = document.getElementById('askAiInput');
+        const askAiSend = document.getElementById('askAiSend');
+        const askAiSendText = document.getElementById('askAiSendText');
+        const askAiSendSpinner = document.getElementById('askAiSendSpinner');
+        const askAiMessages = document.getElementById('askAiMessages');
+
+        // Open modal
+        askAiButton.addEventListener('click', () => {
+            askAiModal.classList.add('active');
+            askAiInput.focus();
+        });
+
+        // Close modal
+        askAiClose.addEventListener('click', () => {
+            askAiModal.classList.remove('active');
+        });
+
+        // Close on backdrop click
+        askAiModal.addEventListener('click', (e) => {
+            if (e.target === askAiModal) {
+                askAiModal.classList.remove('active');
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && askAiModal.classList.contains('active')) {
+                askAiModal.classList.remove('active');
+            }
+        });
+
+        // Send message on Enter (Shift+Enter for newline)
+        askAiInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendAiMessage();
+            }
+        });
+
+        // Send button click
+        askAiSend.addEventListener('click', sendAiMessage);
+
+        // Comprehensive knowledge base about the Clone Tool
+        const cloneToolKnowledge = {
+            purpose: "<strong>The Rocketlane Clone Tool</strong> clones portal configurations between environments<br><br><strong>What It Does:</strong><ul><li>Replicates custom fields, roles, skills</li><li>Clones templates and automations</li><li>No manual recreation needed</li><li>Maintains consistency across environments</li></ul><strong>Common Scenarios:</strong><ul><li>Production → Sandbox migration</li><li>Setting up new client environments</li><li>Testing configuration changes safely</li></ul>",
+
+            features: {
+                fields: "Custom field definitions for Projects, Tasks, Users, and Companies. The tool maps existing fields by (fieldLabel + objectType) and creates new ones that don't exist in the destination portal. Supports all field types: TEXT, NUMBER, DATE, SINGLE_USER, MULTIPLE_USER, YES_OR_NO, RATING, SINGLE_SELECT, MULTI_SELECT, etc.",
+                roles: "User role definitions and permissions. Maps existing roles by name and creates new ones. Preserves role hierarchies and permission sets.",
+                skills: "Skill definitions and configurations. Maps existing skills by name and creates new ones. Useful for resource allocation.",
+                templates: "Project and task templates with automatic field ID remapping and task/phase dependencies. The tool intelligently updates field references in templates to use destination portal field IDs.",
+                automations: "Workflow automations and rules. Created in DISABLED state for manual review. Includes triggers, conditions, and actions with field ID remapping.",
+                timesheets: "Timesheet configurations, categories, and activities. Clones timesheet structure and settings."
+            },
+
+            dryRun: "<strong>Dry Run Mode</strong> - Test without making changes<br><br><strong>How It Works:</strong><ul><li>Fetches all source data</li><li>Performs mapping logic</li><li>Shows preview of what will be created</li><li>Does NOT execute POST requests</li><li>No actual changes to destination</li></ul><strong>Best Practice:</strong> Always run dry run first to preview the clone before executing live mode.",
+
+            duration: "<strong>Clone Duration:</strong><ul><li><strong>Small clones (&lt;100 fields):</strong> 1-2 minutes</li><li><strong>Medium clones (100-300 fields):</strong> 5-10 minutes</li><li><strong>Large clones (300+ fields):</strong> 10-20 minutes</li><li><strong>Browser timeout:</strong> 2 hours max</li></ul><strong>⚠️ Important:</strong> Don't close the browser window during cloning!",
+
+            technicalDuration: "<strong>Technical Breakdown (for 400 fields):</strong><br><br><strong>Rate Limiting:</strong><ul><li>0.2-second delay between field creations</li><li>~5 fields per second</li><li>~300 fields per minute</li><li>400 fields = ~80 seconds for creation</li></ul><strong>Complete Process:</strong><ol><li>Fetch source fields via API (~2-5 sec)</li><li>Fetch destination fields for deduplication (~2-5 sec)</li><li>Field type mapping and validation</li><li>Create each field with 0.2s delay (~80 sec for 400 fields)</li><li>Network latency and API responses</li></ol><strong>Total Time:</strong> 2-3 minutes for 400 fields + additional time for roles/skills/templates if selected<br><br><strong>Monitoring:</strong> Tool polls status every 2 seconds with 2-hour browser timeout",
+
+            howItWorks: "<strong>Technical Process - Step by Step:</strong><ol><li><strong>Connect:</strong> Establishes REST API connections to both portals</li><li><strong>Fetch Source:</strong> GET requests for all source data (fields, roles, etc.)</li><li><strong>Fetch Destination:</strong> GET existing destination data for deduplication check</li><li><strong>Deduplicate:</strong> Matches by (fieldLabel + objectType) to prevent duplicates</li><li><strong>Map Types:</strong> Converts between Portal 1 and Portal 2 API types<br>(e.g., USER → SINGLE_USER, BOOLEAN → YES_OR_NO)</li><li><strong>Create:</strong> POST requests with 0.2s delay for rate limiting</li><li><strong>Generate Mappings:</strong> Creates JSON files showing source ID → destination ID</li><li><strong>Store Logs:</strong> Saves to customer directories (e.g., customers/SourcePortal_to_DestPortal/)</li></ol><strong>Execution:</strong> Runs as background thread, browser polls status every 2 seconds",
+
+            apiRateLimit: "<strong>API Rate Limiting Strategy:</strong><br><br><strong>Implementation:</strong><ul><li>0.2-second (200ms) delay between field creation calls</li><li>Max 5 fields per second</li><li>Max 300 fields per minute</li></ul><strong>Example (400 fields):</strong><ul><li>Rate-limited creation time: ~80 seconds</li><li>Additional network latency varies</li></ul><strong>Why Conservative?</strong><ul><li>Respects Rocketlane's API limits</li><li>Prevents server overwhelm</li><li>Avoids API throttling/errors</li><li>Ensures reliability over speed</li></ul>",
+
+            customerDirectories: "<strong>Automatic Customer Directory Management:</strong><br><br><strong>How It Works:</strong><ul><li>Creates directories based on portal names</li><li>Format: <code>customers/SourcePortal_to_DestPortal/</code></li><li>Example: <code>customers/HighRadiusProd_to_HighRadiusSandbox/</code></li></ul><strong>Benefits:</strong><ul><li>Organized mapping files per customer</li><li>No file conflicts between customers</li><li>Complete isolation of customer data</li></ul><strong>Backward Compatibility:</strong><ul><li>Legacy files auto-migrated on first run</li><li>No manual steps required</li></ul>",
+
+            mappingFiles: "<strong>Generated Mapping Files (JSON):</strong><br><br><strong>What They Contain:</strong><ul><li>Source ID → Destination ID mappings</li><li>Complete audit trail of cloned resources</li></ul><strong>File Types:</strong><ul><li><code>task_field_mapping.json</code></li><li><code>project_field_mapping.json</code></li><li><code>role_mapping.json</code></li><li><code>skill_mapping.json</code></li><li><code>template_mapping.json</code></li><li>Timestamped migration logs (full history)</li></ul><strong>Location:</strong> Stored in customer-specific directories",
+
+            users: "<strong>⚠️ User Cloning Policy:</strong><br><br><strong>Important:</strong><ul><li>Users are <strong>NOT</strong> cloned automatically</li><li>Must be managed separately in destination portal</li></ul><strong>Why?</strong><ul><li>Security and access control</li><li>Manual user provisioning</li><li>Intentional design decision</li></ul><strong>Action Required:</strong> Manually invite/configure users in destination portal",
+
+            safety: "<strong>Safety Measures Built-In:</strong><ul><li>✅ <strong>Protected Fields:</strong> Status, Project Id, etc. never deleted</li><li>✅ <strong>Automations:</strong> Created in DISABLED state for manual review</li><li>✅ <strong>Dry Run Mode:</strong> Preview changes before executing</li><li>✅ <strong>Deduplication:</strong> Prevents duplicate resources</li><li>✅ <strong>Type Validation:</strong> Validates before creation</li><li>✅ <strong>Error Handling:</strong> Comprehensive logging + recovery</li></ul><strong>Philosophy:</strong> Fail-safe, preview-first, log everything",
+
+            fieldTypeMapping: "<strong>Field Type Mapping (Portal 1 → Portal 2):</strong><br><br><strong>Key Conversions:</strong><ul><li>USER → SINGLE_USER</li><li>USERS → MULTIPLE_USER</li><li>BOOLEAN → YES_OR_NO</li><li>DATETIME → DATE_TIME</li></ul><strong>Direct Mappings:</strong><ul><li>TEXT → TEXT</li><li>NUMBER → NUMBER</li><li>DATE → DATE</li><li>MULTI_LINE_TEXT → MULTI_LINE_TEXT</li></ul><strong>Special Cases:</strong><ul><li><strong>RATING:</strong> Requires ratingScale parameter (THREE/FIVE/TEN)</li></ul><strong>Source of Truth:</strong> Uses fieldDataType (not fieldType) from Portal 1 API",
+
+            edgeCases: "<strong>Edge Cases Handled:</strong><ul><li><strong>Duplicate Fields:</strong> Skipped using (fieldLabel + objectType) matching</li><li><strong>Missing Field Types:</strong> Uses fieldDataType fallback</li><li><strong>Portal API Differences:</strong> Automatic type conversion between versions</li><li><strong>RATING Fields:</strong> Defaults to THREE if ratingScale missing</li><li><strong>Empty Choice Values:</strong> Handled gracefully for SELECT fields</li><li><strong>Network Timeouts:</strong> 2-hour browser timeout with status polling</li><li><strong>Flask Auto-Reload:</strong> Disabled (use_reloader=False) prevents killing clones</li><li><strong>Status Field Corruption:</strong> Protected from deletion + recovery docs</li></ul>",
+
+            solvedProblems: "<strong>Critical Problems Solved:</strong><ul><li>❌ <strong>Portal 1 Wrong fieldType</strong><br>✅ Now uses fieldDataType as source of truth</li><li>❌ <strong>Flask Auto-Reload Kills Clones</strong><br>✅ Disabled reloader (use_reloader=False)</li><li>❌ <strong>Status Field Deletion Breaks Portal</strong><br>✅ Protected fields list prevents deletion</li><li>❌ <strong>Multiple Customer File Conflicts</strong><br>✅ Automatic customer-based directories</li><li>❌ <strong>Field Type Mismatches</strong><br>✅ Comprehensive type mapping system</li><li>❌ <strong>BOOLEAN vs YES_OR_NO Confusion</strong><br>✅ Automatic type conversion</li><li>❌ <strong>RATING Missing ratingScale</strong><br>✅ Smart defaults (THREE)</li><li>❌ <strong>Duplicate Field Creation</strong><br>✅ Deduplication logic</li></ul>",
+
+            incrementalCloning: "<strong>Incremental Cloning - Multi-Day Support:</strong><br><br><strong>Scenario:</strong><ul><li>Day 1: Clone TASK fields</li><li>Day 2: Clone PROJECT fields</li><li>Day 3: Clone roles and skills</li></ul><strong>How It Works:</strong><ul><li>Deduplication by (fieldLabel + objectType)</li><li>No duplicates created</li><li>All data in same customer directory</li><li>Mapping files updated incrementally</li></ul><strong>Use Case:</strong> Perfect for large clones split across multiple sessions",
+
+            multiCustomer: "<strong>Multi-Customer Support:</strong><br><br><strong>How It Works:</strong><ul><li>Automatic directory creation based on portal names</li><li>Complete data isolation per customer</li></ul><strong>Example Structure:</strong><ul><li>Customer A: <code>customers/CustomerAProd_to_CustomerASandbox/</code></li><li>Customer B: <code>customers/CustomerBProd_to_CustomerBSandbox/</code></li></ul><strong>Benefits:</strong><ul><li>✅ No file conflicts</li><li>✅ Complete customer isolation</li><li>✅ Unlimited customers supported</li></ul>",
+
+            backwardCompatibility: "<strong>Backward Compatibility - Auto Migration:</strong><br><br><strong>What Happens on First Run:</strong><ol><li>Tool detects legacy files in root directory<ul><li>task_field_mapping.json</li><li>project_field_mapping.json</li><li>migrations/</li></ul></li><li>Automatically migrates to customer directory</li><li>Preserves all data</li><li>No manual steps required</li></ol><strong>Result:</strong><ul><li>✅ One-time automatic migration</li><li>✅ All historical data preserved</li><li>✅ Future runs use new structure</li></ul>",
+
+            flaskIssue: "<strong>🐛 Solved: Flask Auto-Reload Issue</strong><br><br><strong>The Problem:</strong><ul><li>Flask's debug mode auto-reload restarted server on file changes</li><li>Killed long-running clone operations mid-execution</li><li>Frustrating for large clones (300+ fields)</li></ul><strong>The Solution:</strong><ul><li>Added <code>use_reloader=False</code> to <code>app.run()</code> in web_ui.py</li></ul><strong>Result:</strong><ul><li>✅ Clones can now run for hours without interruption</li><li>✅ Server stays alive during entire operation</li></ul>",
+
+            statusFieldIssue: "<strong>🚨 Status Field - CRITICAL:</strong><br><br><strong>Why It Matters:</strong><ul><li>Required for Projects/Tasks to load</li><li>Portal breaks completely if deleted</li><li>Cannot be recreated due to ghost field issue</li></ul><strong>Protection:</strong><ul><li>✅ Included in PROTECTED_FIELD_NAMES list</li><li>✅ Never deleted by the tool</li></ul><strong>If Corrupted (Ghost Field):</strong><ol><li>Contact Rocketlane support immediately</li><li>Request backend deletion of corrupted field</li><li>Re-run clone to restore Status field</li></ol>",
+
+            protectedFields: "<strong>⚠️ 16 Protected Fields (NEVER Deleted):</strong><br><br><strong>Critical System Fields:</strong><ul><li><strong>Status</strong> ⚠️ Required for portal to function!</li><li>Project Id, Project Name, Project Owner</li><li>Task Id, Task Name, Assignee</li></ul><strong>Date Fields:</strong><ul><li>Due Date, Start Date</li><li>Created Date, Modified Date</li></ul><strong>Relationship Fields:</strong><ul><li>Project, Phase, Priority</li></ul><strong>Audit Fields:</strong><ul><li>Created By, Modified By</li></ul><strong>Protection Method:</strong> isSystem=true OR in PROTECTED_FIELD_NAMES list",
+
+            deduplication: "<strong>Smart Deduplication System:</strong><br><br><strong>How It Works:</strong><ol><li>Fetch existing resources from destination portal</li><li>Check for matches using:<ul><li>Fields: (fieldLabel + objectType)</li><li>Roles/Skills: (name)</li></ul></li><li>If match found:<ul><li>Skip creation</li><li>Map to existing resource ID</li></ul></li><li>If no match:<ul><li>Create new resource</li></ul></li></ol><strong>Benefits:</strong><ul><li>Prevents duplicates across multiple clone runs</li><li>Enables incremental cloning</li><li>Safe to run multiple times</li></ul>",
+
+            errorHandling: "<strong>Comprehensive Error Handling:</strong><ul><li><strong>API Failures:</strong> Logged with full error details</li><li><strong>Invalid Field Types:</strong> Validated before creation</li><li><strong>Network Timeouts:</strong> Retry logic + 2-hour browser timeout</li><li><strong>Authentication Errors:</strong> Clear error messages</li><li><strong>Rate Limiting:</strong> 0.2s delay prevents throttling</li><li><strong>Field Creation Failures:</strong> Logged individually without stopping clone</li><li><strong>Missing Parameters:</strong> Smart defaults (e.g., ratingScale=THREE)</li></ul><strong>Philosophy:</strong> Fail gracefully, log everything, continue when possible",
+
+            logging: "<strong>Comprehensive Logging System:</strong><ul><li><strong>Migration Logs:</strong> Timestamped directories<br>Example: <code>High_Radius_Prod_to_Sandbox_live_20260209_040806/</code></li><li><strong>Field Mapping Files:</strong> Source ID → Destination ID mappings</li><li><strong>Success/Failure Counts:</strong> Displayed in UI real-time</li><li><strong>Error Details:</strong> Full API responses logged</li><li><strong>Clone History:</strong> Preserved across runs in customer directories</li></ul><strong>Benefits:</strong> Full auditability and debugging capability",
+
+            v1vPortal2API: "<strong>Bridging Portal 1 ↔ Portal 2 API Differences:</strong><br><br><strong>The Challenge:</strong><ul><li>Portal 1: Uses V1 API (fieldDataType)</li><li>Portal 2: Uses newer API (fieldType)</li><li>Portal 1 sometimes returns incorrect fieldType values</li></ul><strong>The Solution:</strong><ol><li>Read from Portal 1 V1 API</li><li>Extract fieldDataType (source of truth)</li><li>Map to Portal 2 field types</li><li>Create in Portal 2 with correct type</li></ol><strong>Result:</strong> Seamless cloning despite API version inconsistencies",
+
+            choiceValues: "<strong>SELECT Field Handling (Dropdowns):</strong><br><br><strong>Field Types:</strong><ul><li>SINGLE_SELECT</li><li>MULTI_SELECT</li></ul><strong>Processing Logic:</strong><ol><li>Check if choiceValues exist</li><li>If empty and fieldType is SELECT → use fieldDataType fallback</li><li>Preserve choice values when cloning</li><li>Handle dropdown options correctly</li></ol><strong>Result:</strong> Dropdown fields work properly in destination portal with all options intact",
+
+            requirementsValidation: "<strong>Pre-Creation Validation Checks:</strong><br><br><strong>Required Parameters:</strong><ul><li>✅ fieldLabel present</li><li>✅ objectType present</li><li>✅ fieldType present</li></ul><strong>Type-Specific Validation:</strong><ul><li><strong>Field Type:</strong> Valid for Portal 2 API</li><li><strong>RATING Fields:</strong> Must have ratingScale (THREE/FIVE/TEN)</li><li><strong>Choice Fields:</strong> Must have valid choiceValues</li><li><strong>User Fields:</strong> Properly typed (SINGLE_USER vs MULTIPLE_USER)</li></ul><strong>Error Handling:</strong> Invalid fields logged but don't stop the clone",
+
+            technicalArchitecture: "<strong>🏗️ Technical Architecture & Stack:</strong><br><br><strong>Backend:</strong><ul><li><strong>Python 3.9+</strong> - Core runtime</li><li><strong>Flask</strong> - Web framework for REST API</li><li><strong>Requests</strong> - HTTP client library</li><li><strong>Threading</strong> - Background task execution</li><li><strong>JSON</strong> - Configuration & logging</li></ul><br><strong>Frontend:</strong><ul><li><strong>HTML5/CSS3</strong> - Responsive UI design</li><li><strong>Vanilla JavaScript</strong> - No framework dependencies</li><li><strong>Real-time Progress</strong> - Status polling every 2 seconds</li><li><strong>Detailed Error Reporting</strong> - Live feedback</li></ul><br><strong>APIs & Integration:</strong><ul><li><strong>Rocketlane REST APIs</strong> - API v1.0 & v1</li><li><strong>Authentication</strong> - API key-based</li><li><strong>Rate Limiting</strong> - 0.2s delays</li></ul><br><strong>Configuration:</strong><ul><li><strong>portal.properties</strong> - All settings in one file</li><li><strong>Feature Flags</strong> - Selective migration</li><li><strong>Multi-environment</strong> - Easy setup</li></ul><br><strong>DevOps:</strong><ul><li><strong>Git</strong> - Version control</li><li><strong>Properties-based config</strong> - No hardcoded values</li><li><strong>JSON logging</strong> - Complete audit trail</li><li><strong>Error tracking</strong> - Comprehensive diagnostics</li></ul>",
+
+            technicalInnovation: "<strong>💡 Technical Innovation:</strong><br><br><strong>1. Recursive ID Remapping:</strong><ul><li>Traverses nested data structures (templates, automations)</li><li>Remaps field IDs, user IDs, role IDs, template IDs</li><li>Handles complex automation action blocks</li><li>Preserves relationships across entities</li></ul><br><strong>2. Smart API Discovery:</strong><ul><li>Identified correct automation endpoints</li><li>Fixed /api/v1/automations/{id} vs /api/v1/automations/global/{id}</li><li>Handles different response formats</li><li>Adapts to API version differences</li></ul><br><strong>3. Concise Logging:</strong><ul><li>Single-line output per entity</li><li>Prevents output truncation</li><li>Clear success/failure indicators</li><li>Timestamped migration history</li></ul><br><strong>4. Data Sanitization:</strong><ul><li>Removes invalid field names</li><li>Cleans system-specific metadata</li><li>Validates before creation</li><li>Type conversion & normalization</li></ul>",
+
+            fileStructure: "<strong>📁 Project File Structure:</strong><br><br><strong>Core Files:</strong><ul><li><code>web_ui.py</code> - Flask web server & UI (516 lines)</li><li><code>migrate_all_with_properties.py</code> - Main migration engine</li><li><code>properties_loader.py</code> - Configuration loader</li></ul><br><strong>Templates & Static:</strong><ul><li><code>templates/index.html</code> - Web UI (1000+ lines)</li><li><code>static/style.css</code> - Premium CSS (1300+ lines)</li></ul><br><strong>Utility Scripts:</strong><ul><li><code>delete_highradius_fields.py</code> - Field deletion tool</li><li><code>check_and_create_status_field.py</code> - Status field recovery</li><li><code>test_customer_directories.py</code> - Test suite</li></ul><br><strong>Config:</strong><ul><li><code>portal.properties</code> - Portal configuration (user-created)</li></ul><br><strong>Generated:</strong><ul><li><code>customers/{Name}/</code> - Customer data directories</li><li><code>*.json</code> - Mapping files</li><li><code>migrations/</code> - Migration logs</li></ul>",
+
+            propertiesFile: "<strong>⚙️ portal.properties File Format:</strong><br><br><strong>Source Portal (portal1):</strong><ul><li><code>portal1.name</code> - Portal display name</li><li><code>portal1.base.url</code> - Base URL</li><li><code>portal1.v1.api.base</code> - V1 API base</li><li><code>portal1.api.key</code> - API key</li><li><code>portal1.automation.api.key</code> - Automation API key (optional)</li></ul><br><strong>Destination Portal (portal2):</strong><ul><li><code>portal2.name</code> - Portal display name</li><li><code>portal2.base.url</code> - Base URL</li><li><code>portal2.api.base</code> - API base</li><li><code>portal2.api.key</code> - API key</li></ul><br><strong>Feature Flags:</strong><ul><li><code>migration.enable.fields</code> - true/false</li><li><code>migration.enable.fields.task</code> - true/false</li><li><code>migration.enable.roles</code> - true/false</li><li><code>migration.enable.templates</code> - true/false</li></ul><br><strong>Rate Limits (seconds):</strong><ul><li><code>ratelimit.field.creation=0.2</code></li><li><code>ratelimit.template.creation=0.2</code></li></ul><br><strong>Paths:</strong><ul><li><code>customer.directory=customers/Name/</code></li><li><code>logging.field.mapping=path/to/file.json</code></li></ul>",
+
+            apiEndpoints: "<strong>🔌 Complete API Endpoints Used:</strong><br><br><strong>Fields (Portal 1):</strong><ul><li><code>GET /api/1.0/fields</code> - List all fields</li><li><code>GET /api/1.0/fields/{fieldId}</code> - Field details</li><li><code>GET /api/v1/all-fields</code> - All fields (alternate)</li><li><code>GET /api/v1/field-sections</code> - Field sections</li></ul><br><strong>Fields (Portal 2):</strong><ul><li><code>POST /api/1.0/fields</code> - Create field</li><li><code>GET /api/v1/field-sections</code> - Field sections</li></ul><br><strong>Roles:</strong><ul><li><code>GET /api/v1/roles</code> - List roles (Portal 1)</li><li><code>POST /api/v1/roles</code> - Create role (Portal 2)</li></ul><br><strong>Skills:</strong><ul><li><code>GET /api/v1/skill/fields</code> - Portal 1</li><li><code>POST /api/v1/fields</code> - Portal 2 (as fields)</li></ul><br><strong>Templates:</strong><ul><li><code>GET /api/v1/templates</code> - List templates</li><li><code>GET /api/v1/templates/{id}</code> - Template detail</li><li><code>GET /api/v1/templates/dependency-map</code> - Dependencies</li><li><code>POST /api/v1/templates</code> - Create template</li></ul><br><strong>Automations:</strong><ul><li><code>GET /api/v1/automations/global</code> - List automations</li><li><code>GET /api/v1/automations/global/{id}</code> - Automation detail (Portal 1)</li><li><code>POST /api/v1/automations/global</code> - Create automation (Portal 2)</li></ul><br><strong>Timesheets:</strong><ul><li><code>GET /api/v1/timesheets/configuration</code></li><li><code>GET /api/v1/timesheets/categories</code></li><li><code>GET /api/v1/timesheets/activity</code></li><li><code>POST</code> variants for creation</li></ul>",
+
+            backgroundProcessing: "<strong>🔄 Background Processing Model:</strong><br><br><strong>Architecture:</strong><ul><li><strong>Main Thread:</strong> Flask web server</li><li><strong>Background Thread:</strong> Migration execution (daemon=True)</li><li><strong>Communication:</strong> Global dict (<code>current_migration</code>)</li></ul><br><strong>Process Flow:</strong><ol><li>User clicks 'Run Clone' → <code>/run-migration</code> endpoint</li><li>Flask spawns background thread with <code>threading.Thread</code></li><li>Thread runs <code>run_migration_async()</code> function</li><li>Thread executes subprocess: <code>python3 migrate_all_with_properties.py</code></li><li>Output streamed to file: <code>migration_output_{timestamp}.txt</code></li><li>Browser polls <code>/migration-status</code> every 2 seconds</li><li>Status returned from <code>current_migration</code> global dict</li></ol><br><strong>State Management:</strong><ul><li><code>current_migration['running']</code> - boolean</li><li><code>current_migration['start_time']</code> - ISO timestamp</li><li><code>current_migration['output_file']</code> - log file path</li><li><code>current_migration['process']</code> - subprocess handle</li></ul><br><strong>Why This Design:</strong><ul><li>✅ Long-running operations don't block UI</li><li>✅ Browser can close and reopen</li><li>✅ Status survives page refresh</li><li>✅ Output captured to file</li></ul>",
+
+            statusMonitoring: "<strong>📊 Real-Time Status Monitoring:</strong><br><br><strong>Client-Side Polling:</strong><ul><li><strong>Interval:</strong> 2 seconds</li><li><strong>Endpoint:</strong> <code>GET /migration-status</code></li><li><strong>Timeout:</strong> 2 hours browser timeout</li></ul><br><strong>Status States:</strong><ul><li><code>not_started</code> - No migration initiated</li><li><code>running</code> - Migration in progress</li><li><code>complete</code> - Migration finished (success or error)</li></ul><br><strong>Running State Response:</strong><ul><li><code>start_time</code> - When migration started</li><li><code>progress</code> - Current phase info</li><li><code>output_file</code> - Log file path</li></ul><br><strong>Complete State Response:</strong><ul><li><code>status</code> - 'success' or 'error'</li><li><code>output</code> - Full migration output</li><li><code>returncode</code> - Process exit code (0=success)</li><li><code>mappings</code> - Generated mapping files</li><li><code>dry_run</code> - Was it a dry run?</li></ul><br><strong>UI Updates:</strong><ul><li>Progress spinner shows during migration</li><li>Success message with mapping file links</li><li>Error details if migration fails</li></ul>",
+
+            fieldSections: "<strong>📑 Field Sections Handling:</strong><br><br><strong>What Are Field Sections:</strong><ul><li>Organizational groups for fields in UI</li><li>Example: 'Basic Info', 'Custom Data', 'Metadata'</li><li>Fields belong to sections</li></ul><br><strong>API Endpoints:</strong><ul><li><code>GET /api/v1/field-sections</code> - Both portals</li><li>Returns list of sections with IDs</li></ul><br><strong>Cloning Logic:</strong><ol><li>Fetch source portal sections</li><li>Fetch destination portal sections</li><li>Match sections by name (case-insensitive)</li><li>Map section IDs (source → destination)</li><li>When creating field, use destination section ID</li></ol><br><strong>Section Mapping File:</strong><ul><li><code>section_mapping.json</code></li><li>Format: <code>{\"source_section_id\": \"dest_section_id\"}</code></li><li>Stored in customer directory</li></ul><br><strong>Edge Cases:</strong><ul><li>Missing section in destination → Field created without section</li><li>Section name mismatch → Creates in default section</li></ul>",
+
+            templateDependencies: "<strong>🔗 Template Dependencies:</strong><br><br><strong>What Are Dependencies:</strong><ul><li>Templates can have parent-child relationships</li><li>Example: 'Onboarding' template uses 'Task Template A'</li><li>Must clone in correct order</li></ul><br><strong>API Endpoint:</strong><ul><li><code>GET /api/v1/templates/dependency-map</code></li><li>Returns graph of template dependencies</li></ul><br><strong>Cloning Strategy:</strong><ol><li>Fetch dependency map from source</li><li>Build dependency graph</li><li>Topological sort (parents before children)</li><li>Clone in sorted order</li><li>Remap template IDs in child templates</li></ol><br><strong>Dependency Types:</strong><ul><li><strong>FORM templates</strong> - Can be standalone or dependencies</li><li><strong>TASK templates</strong> - Can reference other task templates</li><li><strong>PROJECT templates</strong> - Can reference task/form templates</li></ul><br><strong>Migration Order:</strong><ul><li>1. FORM templates (standalone)</li><li>2. STATUS_UPDATE templates</li><li>3. DOCUMENT templates</li><li>4. TASK templates (with dependencies resolved)</li><li>5. PROJECT templates (last, reference everything)</li></ul><br><strong>Mapping File:</strong><ul><li><code>dependency_mapping.json</code></li><li>Tracks template ID remapping</li></ul>",
+
+            automationDetails: "<strong>🤖 Automation Cloning Details:</strong><br><br><strong>Automation Structure:</strong><ul><li><strong>Triggers:</strong> Events that start automation</li><li><strong>Conditions:</strong> When to execute actions</li><li><strong>Actions:</strong> What to do (update fields, send emails, etc.)</li></ul><br><strong>Key Challenge - ID Remapping:</strong><ul><li>Automations reference field IDs, user IDs, role IDs</li><li>All IDs different in destination portal</li><li><strong>Solution:</strong> Recursive traversal & remapping</li></ul><br><strong>Cloning Process:</strong><ol><li>Fetch all automations from source</li><li>For each automation:<ul><li>Extract trigger, conditions, actions</li><li>Recursively find all ID references</li><li>Look up IDs in mapping files</li><li>Replace with destination IDs</li><li>Mark as DISABLED</li><li>Create in destination portal</li></ul></li></ol><br><strong>Why DISABLED:</strong><ul><li>⚠️ Automations can modify data</li><li>⚠️ ID remapping might have errors</li><li>✅ User must manually review</li><li>✅ Enable after verification</li></ul><br><strong>ID Types Remapped:</strong><ul><li>Field IDs (task, project, user, company)</li><li>User IDs (assignees, watchers)</li><li>Role IDs (permission checks)</li><li>Template IDs (create from template actions)</li></ul><br><strong>API Endpoints:</strong><ul><li><code>GET /api/v1/automations/global</code> - List</li><li><code>GET /api/v1/automations/global/{id}</code> - Detail (Portal 1)</li><li><code>POST /api/v1/automations/global</code> - Create (Portal 2)</li></ul>",
+
+            timesheetDetails: "<strong>⏱️ Timesheet Cloning Details:</strong><br><br><strong>Timesheet Components:</strong><ul><li><strong>Configuration:</strong> Global timesheet settings</li><li><strong>Categories:</strong> Time entry categories (Billable, Non-Billable, etc.)</li><li><strong>Activities:</strong> Specific activities within categories</li></ul><br><strong>API Endpoints:</strong><ul><li><code>GET /api/v1/timesheets/configuration</code></li><li><code>GET /api/v1/timesheets/categories</code></li><li><code>GET /api/v1/timesheets/activity</code></li><li><code>POST</code> variants for creation</li></ul><br><strong>Cloning Process:</strong><ol><li>Fetch configuration from source</li><li>Fetch all categories from source</li><li>Fetch all activities from source</li><li>Map categories by name</li><li>Map activities by (category + name)</li><li>Create in destination with 0.2s delay</li></ol><br><strong>Configuration Settings:</strong><ul><li>Enable/disable timesheets</li><li>Time entry format (hours, days)</li><li>Approval workflows</li><li>Billable rates</li></ul><br><strong>Category Structure:</strong><ul><li>Category name</li><li>Category type (billable/non-billable)</li><li>Color coding</li><li>Associated activities</li></ul><br><strong>Mapping Files:</strong><ul><li><code>timesheet_mapping.json</code></li><li>Maps category IDs and activity IDs</li></ul>",
+
+            directoryStructure: "<strong>🗂️ Complete Directory Structure:</strong><br><br><code>rocketlane-migrator/</code><br><code>├── web_ui.py</code> (Flask server, 516 lines)<br><code>├── migrate_all_with_properties.py</code> (Migration engine)<br><code>├── properties_loader.py</code> (Config loader)<br><code>├── delete_highradius_fields.py</code> (Field deletion)<br><code>├── check_and_create_status_field.py</code> (Recovery tool)<br><code>├── test_customer_directories.py</code> (Tests)<br><code>├── portal.properties</code> (User config)<br><code>├── templates/</code><br><code>│   └── index.html</code> (Web UI, 1000+ lines)<br><code>├── static/</code><br><code>│   └── style.css</code> (Premium CSS, 1300+ lines)<br><code>├── customers/</code> (Auto-generated)<br><code>│   ├── HighRadiusProd_to_HighRadiusSandbox/</code><br><code>│   │   ├── task_field_mapping.json</code><br><code>│   │   ├── project_field_mapping.json</code><br><code>│   │   ├── role_mapping.json</code><br><code>│   │   ├── skill_mapping.json</code><br><code>│   │   ├── user_mapping.json</code><br><code>│   │   ├── template_mapping.json</code><br><code>│   │   ├── dependency_mapping.json</code><br><code>│   │   ├── automation_mapping.json</code><br><code>│   │   ├── timesheet_mapping.json</code><br><code>│   │   ├── section_mapping.json</code><br><code>│   │   ├── migration_log.json</code><br><code>│   │   └── migrations/</code><br><code>│   │       └── Name_live_YYYYMMDD_HHMMSS/</code><br><code>│   └── CustomerB_Prod_to_Sandbox/</code><br><code>│       └── ...</code><br><code>└── migration_output_{timestamp}.txt</code> (Temp logs)",
+
+            troubleshooting: "<strong>🔧 Troubleshooting Guide:</strong><br><br><strong>Problem: Clone stuck/not progressing</strong><ul><li>Check browser console for errors</li><li>Verify API keys are valid</li><li>Check network connectivity</li><li>Look at migration_output file for errors</li></ul><br><strong>Problem: Fields created but wrong type</strong><ul><li>Check Portal 1 uses fieldDataType (not fieldType)</li><li>Verify type mapping in field_type_mapping.json</li><li>Common: BOOLEAN vs YES_OR_NO confusion</li></ul><br><strong>Problem: Status field missing/portal broken</strong><ul><li>⚠️ CRITICAL: Contact Rocketlane support</li><li>Ghost field issue - backend deletion required</li><li>Do NOT manually delete/recreate</li><li>Recovery: check_and_create_status_field.py after support fixes</li></ul><br><strong>Problem: Duplicates created</strong><ul><li>Check deduplication logic: (fieldLabel + objectType)</li><li>Verify field names match exactly</li><li>Case-sensitive matching</li></ul><br><strong>Problem: Flask auto-reload kills clone</strong><ul><li>✅ Already fixed: use_reloader=False</li><li>Ensure latest version of web_ui.py</li></ul><br><strong>Problem: API rate limit errors</strong><ul><li>Increase rate limit delays in portal.properties</li><li>Default 0.2s should be safe</li><li>Check Rocketlane API status</li></ul><br><strong>Problem: Template dependencies fail</strong><ul><li>Clone in correct order (FORM → TASK → PROJECT)</li><li>Check dependency_mapping.json</li><li>Verify parent templates cloned first</li></ul><br><strong>Problem: Automation IDs not remapped</strong><ul><li>Check all mapping files exist</li><li>Verify recursive remapping logic</li><li>Manually review disabled automations</li></ul>",
+
+            bestPractices: "<strong>✅ Best Practices & Workflows:</strong><br><br><strong>Initial Setup:</strong><ol><li>Always run DRY RUN first</li><li>Review preview output carefully</li><li>Verify portal names are correct</li><li>Check API keys have required permissions</li></ol><br><strong>For Large Clones (300+ fields):</strong><ol><li>Clone in batches by field type</li><li>Day 1: TASK fields only</li><li>Day 2: PROJECT fields only</li><li>Day 3: USER + COMPANY fields</li><li>Day 4: Roles, Skills, Templates</li><li>Deduplication prevents duplicates</li></ol><br><strong>Multi-Customer Management:</strong><ol><li>Use clear, consistent portal names</li><li>Format: CustomerName + Environment (Prod/Sandbox)</li><li>Example: 'Acme Corp Production', 'Acme Corp Sandbox'</li><li>Tool auto-creates directories</li></ol><br><strong>Testing New Features:</strong><ol><li>Clone to sandbox first</li><li>Test field functionality</li><li>Verify automations work (after enabling)</li><li>Check template dependencies</li><li>Then clone to production</li></ol><br><strong>After Migration:</strong><ol><li>Review all mapping files</li><li>Enable automations one by one</li><li>Test each automation</li><li>Manually invite users to destination</li><li>Verify timesheets work</li><li>Save migration logs for audit</li></ol><br><strong>Handling Errors:</strong><ol><li>Don't panic - partial clones are safe</li><li>Check migration_output file for details</li><li>Re-run clone (deduplication prevents duplicates)</li><li>Contact support if critical field missing</li></ol>",
+
+            limitations: "<strong>⚠️ Tool Limitations & Constraints:</strong><br><br><strong>Cannot Clone:</strong><ul><li><strong>Users:</strong> Must be manually invited (security reasons)</li><li><strong>Project Data:</strong> Only configuration, not actual projects</li><li><strong>Task Data:</strong> Only configuration, not actual tasks</li><li><strong>Historical Data:</strong> No time entries, comments, etc.</li><li><strong>Files/Attachments:</strong> Templates structure only</li><li><strong>Integrations:</strong> External service configs</li></ul><br><strong>API Limitations:</strong><ul><li>Rate limits: ~5 fields/second max</li><li>Portal 1 fieldType sometimes incorrect</li><li>Some fields readonly after creation</li><li>Choice values cannot be modified after creation</li></ul><br><strong>Technical Constraints:</strong><ul><li>Browser timeout: 2 hours</li><li>Flask single-threaded (one clone at a time)</li><li>No concurrent migrations</li><li>Requires Python 3.9+</li></ul><br><strong>Field Type Constraints:</strong><ul><li>RATING must have ratingScale</li><li>SINGLE_SELECT/MULTI_SELECT need choiceValues</li><li>USER fields require valid user IDs</li><li>Some types incompatible between portals</li></ul><br><strong>Automation Constraints:</strong><ul><li>Created as DISABLED (manual review required)</li><li>ID remapping might miss edge cases</li><li>Complex action blocks need verification</li><li>Email templates not fully preserved</li></ul><br><strong>Known Issues:</strong><ul><li>Status field ghost corruption (contact support)</li><li>Very large clones (1000+ fields) may timeout</li><li>Portal API changes can break tool</li></ul>",
+
+            security: "<strong>🔒 Security Considerations:</strong><br><br><strong>API Key Security:</strong><ul><li>⚠️ API keys give full portal access</li><li>Store in portal.properties (not in code)</li><li>Do NOT commit to git</li><li>Add *.properties to .gitignore</li><li>Rotate keys regularly</li></ul><br><strong>User Cloning Policy:</strong><ul><li>✅ Users NOT cloned (intentional)</li><li>Prevents unauthorized access</li><li>Manual user provisioning required</li><li>Each user explicitly invited</li></ul><br><strong>Automation Safety:</strong><ul><li>✅ All automations created as DISABLED</li><li>Prevents accidental data modification</li><li>Manual review required before enabling</li><li>Test in sandbox first</li></ul><br><strong>Data Access:</strong><ul><li>Tool has read access to source portal</li><li>Tool has write access to destination portal</li><li>No data sent to external services</li><li>Runs locally on your machine</li></ul><br><strong>Audit Trail:</strong><ul><li>Complete logs in migration_log.json</li><li>Mapping files show all changes</li><li>Timestamped migration history</li><li>Traceable source → destination IDs</li></ul><br><strong>Best Practices:</strong><ul><li>Use separate API keys per environment</li><li>Revoke keys after migration</li><li>Review logs before enabling automations</li><li>Test in sandbox before production</li></ul>",
+
+            performance: "<strong>⚡ Performance Characteristics:</strong><br><br><strong>Speed Factors:</strong><ul><li><strong>Rate Limiting:</strong> Main bottleneck (0.2s delays)</li><li><strong>Network Latency:</strong> API call round-trip time</li><li><strong>Field Count:</strong> Linear scaling</li><li><strong>API Response Time:</strong> Portal server performance</li></ul><br><strong>Benchmarks:</strong><ul><li><strong>100 fields:</strong> ~1-2 minutes</li><li><strong>300 fields:</strong> ~5-10 minutes</li><li><strong>500 fields:</strong> ~10-15 minutes</li><li><strong>1000 fields:</strong> ~20-30 minutes</li></ul><br><strong>Optimization Strategies:</strong><ul><li>✅ Parallel GET requests (fetch source & destination)</li><li>✅ Single-threaded POST (respects rate limits)</li><li>✅ Efficient JSON parsing</li><li>✅ Minimal logging overhead</li></ul><br><strong>Memory Usage:</strong><ul><li>~10-50 MB for typical clone</li><li>Scales with: field count, template complexity</li><li>No memory leaks (tested up to 1000+ fields)</li></ul><br><strong>Network Usage:</strong><ul><li>~1-2 KB per field (GET + POST)</li><li>~10-50 KB per template</li><li>~5-10 KB per automation</li><li>Total: ~1-10 MB for typical clone</li></ul><br><strong>Performance Tuning:</strong><ul><li>Reduce rate limits (faster but risky)</li><li>Increase rate limits (slower but safer)</li><li>Default 0.2s recommended for reliability</li></ul>",
+
+            versionHistory: "<strong>📜 Version History & Changes:</strong><br><br><strong>Major Milestones:</strong><ul><li><strong>v0.1:</strong> Initial prototype (field cloning only)</li><li><strong>v0.5:</strong> Added roles, skills, templates</li><li><strong>v0.8:</strong> Web UI introduced</li><li><strong>v1.0:</strong> Production-ready release</li></ul><br><strong>Key Improvements:</strong><ul><li>✅ Customer directory management (2026-02-09)</li><li>✅ Flask auto-reload fix (prevents clone interruption)</li><li>✅ Status field protection (critical fix)</li><li>✅ Recursive ID remapping (templates, automations)</li><li>✅ Smart deduplication (incremental cloning)</li><li>✅ Field type mapping (Portal 1 ↔ Portal 2)</li><li>✅ Interactive field type selector</li><li>✅ Ask AI chatbot integration</li><li>✅ Premium UI design</li></ul><br><strong>Bug Fixes:</strong><ul><li>🐛 Fixed fieldType vs fieldDataType confusion</li><li>🐛 Fixed BOOLEAN → YES_OR_NO mapping</li><li>🐛 Fixed RATING missing ratingScale</li><li>🐛 Fixed automation endpoint discovery</li><li>🐛 Fixed duplicate field creation</li><li>🐛 Fixed status field deletion vulnerability</li></ul><br><strong>Current Version:</strong> v1.0 (Clone smarter, not harder • v1.0)"
+        };
+
+        function sendAiMessage() {
+            const question = askAiInput.value.trim();
+            if (!question) return;
+
+            // Clear welcome message on first question
+            const welcome = askAiMessages.querySelector('.ai-welcome');
+            if (welcome) {
+                welcome.remove();
+            }
+
+            // Add user message
+            addMessage(question, 'user');
+            askAiInput.value = '';
+
+            // Disable send button
+            askAiSend.disabled = true;
+            askAiSendText.textContent = 'Thinking...';
+            askAiSendSpinner.style.display = 'inline';
+
+            // Simulate AI response (you can replace this with actual AI API call)
+            setTimeout(() => {
+                const response = generateAiResponse(question);
+                addMessage(response, 'assistant');
+
+                // Re-enable send button
+                askAiSend.disabled = false;
+                askAiSendText.textContent = 'Send';
+                askAiSendSpinner.style.display = 'none';
+            }, 1000);
+        }
+
+        function addMessage(text, role) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `ai-message ai-message-${role}`;
+
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = 'ai-message-bubble';
+
+            // Use innerHTML to support formatting (bullet points, line breaks)
+            bubbleDiv.innerHTML = text;
+
+            messageDiv.appendChild(bubbleDiv);
+            askAiMessages.appendChild(messageDiv);
+
+            // Scroll to bottom
+            askAiMessages.scrollTop = askAiMessages.scrollHeight;
+        }
+
+        function generateAiResponse(question) {
+            const q = question.toLowerCase();
+
+            // Edge cases and problems solved
+            if (q.includes('edge case') || q.includes('corner case') ||
+                (q.includes('handle') && (q.includes('case') || q.includes('scenario')))) {
+                return cloneToolKnowledge.edgeCases;
+            }
+
+            if (q.includes('problem') || q.includes('issue') || q.includes('solve') ||
+                q.includes('fix') || q.includes('bug')) {
+                return cloneToolKnowledge.solvedProblems;
+            }
+
+            // Flask/server issues
+            if (q.includes('flask') || q.includes('server') || q.includes('restart') ||
+                q.includes('auto-reload') || q.includes('reloader')) {
+                return cloneToolKnowledge.flaskIssue;
+            }
+
+            // Status field issues
+            if (q.includes('status') && (q.includes('field') || q.includes('delete') ||
+                q.includes('missing') || q.includes('corrupt'))) {
+                return cloneToolKnowledge.statusFieldIssue;
+            }
+
+            // Protected fields
+            if ((q.includes('protect') && q.includes('field')) ||
+                q.includes('never delete') || q.includes('critical field')) {
+                return cloneToolKnowledge.protectedFields;
+            }
+
+            // Deduplication
+            if (q.includes('duplicate') || q.includes('dedupe') || q.includes('deduplication') ||
+                (q.includes('same') && q.includes('field'))) {
+                return cloneToolKnowledge.deduplication;
+            }
+
+            // Incremental cloning
+            if (q.includes('incremental') || q.includes('multiple day') || q.includes('multi-day') ||
+                (q.includes('clone') && (q.includes('again') || q.includes('multiple time')))) {
+                return cloneToolKnowledge.incrementalCloning;
+            }
+
+            // Multi-customer
+            if (q.includes('multiple customer') || q.includes('multi-customer') ||
+                q.includes('different customer') || (q.includes('customer') && q.includes('conflict'))) {
+                return cloneToolKnowledge.multiCustomer;
+            }
+
+            // Backward compatibility
+            if (q.includes('backward') || q.includes('legacy') || q.includes('old file') ||
+                q.includes('migration') || q.includes('upgrade')) {
+                return cloneToolKnowledge.backwardCompatibility;
+            }
+
+            // Error handling
+            if (q.includes('error') || q.includes('fail') || q.includes('exception')) {
+                return cloneToolKnowledge.errorHandling;
+            }
+
+            // Logging
+            if (q.includes('log') && !q.includes('clone log')) {
+                return cloneToolKnowledge.logging;
+            }
+
+            // Portal 1 vs Portal 2 API
+            if (q.includes('portal 1') || q.includes('portal 2') || q.includes('v1 api') ||
+                q.includes('api version') || q.includes('api difference')) {
+                return cloneToolKnowledge.v1vPortal2API;
+            }
+
+            // Choice values / dropdowns
+            if (q.includes('choice') || q.includes('dropdown') || q.includes('select field') ||
+                (q.includes('single select') || q.includes('multi select'))) {
+                return cloneToolKnowledge.choiceValues;
+            }
+
+            // Validation
+            if (q.includes('validat') || q.includes('check') || q.includes('verify')) {
+                return cloneToolKnowledge.requirementsValidation;
+            }
+
+            // Technical Architecture
+            if (q.includes('architecture') || q.includes('tech stack') || q.includes('technology stack') ||
+                q.includes('technology') || (q.includes('stack') && !q.includes('full')) ||
+                q.includes('backend') || q.includes('frontend') ||
+                (q.includes('built') && q.includes('with')) ||
+                q.includes('python') || q.includes('flask') || q.includes('javascript') ||
+                q.includes('html') || q.includes('css')) {
+                return cloneToolKnowledge.technicalArchitecture;
+            }
+
+            // Technical Innovation
+            if (q.includes('innovation') || q.includes('innovative') ||
+                q.includes('recursive') || q.includes('id remapping') ||
+                q.includes('smart api') || q.includes('api discovery') ||
+                q.includes('data sanitization') || q.includes('sanitize') ||
+                (q.includes('technical') && (q.includes('innovation') || q.includes('feature')))) {
+                return cloneToolKnowledge.technicalInnovation;
+            }
+
+            // File structure
+            if (q.includes('file structure') || q.includes('project structure') ||
+                q.includes('what files') || q.includes('file list') ||
+                (q.includes('files') && q.includes('project'))) {
+                return cloneToolKnowledge.fileStructure;
+            }
+
+            // Properties file
+            if (q.includes('properties') || q.includes('portal.properties') ||
+                q.includes('configuration file') || q.includes('config file') ||
+                (q.includes('properties') && q.includes('file'))) {
+                return cloneToolKnowledge.propertiesFile;
+            }
+
+            // API endpoints
+            if (q.includes('endpoint') || q.includes('api list') || q.includes('what apis') ||
+                (q.includes('api') && (q.includes('used') || q.includes('call')))) {
+                return cloneToolKnowledge.apiEndpoints;
+            }
+
+            // Background processing
+            if (q.includes('background') || q.includes('threading') || q.includes('async') ||
+                q.includes('subprocess') || (q.includes('how') && q.includes('run'))) {
+                return cloneToolKnowledge.backgroundProcessing;
+            }
+
+            // Status monitoring
+            if (q.includes('status') && (q.includes('monitor') || q.includes('polling') || q.includes('check'))) {
+                return cloneToolKnowledge.statusMonitoring;
+            }
+
+            // Field sections
+            if (q.includes('field section') || q.includes('sections') ||
+                (q.includes('section') && q.includes('field'))) {
+                return cloneToolKnowledge.fieldSections;
+            }
+
+            // Template dependencies
+            if (q.includes('template') && (q.includes('dependenc') || q.includes('order') || q.includes('parent'))) {
+                return cloneToolKnowledge.templateDependencies;
+            }
+
+            // Automation details
+            if (q.includes('automation') && (q.includes('how') || q.includes('detail') || q.includes('work'))) {
+                return cloneToolKnowledge.automationDetails;
+            }
+
+            // Timesheet details
+            if (q.includes('timesheet') && (q.includes('how') || q.includes('detail') || q.includes('work'))) {
+                return cloneToolKnowledge.timesheetDetails;
+            }
+
+            // Directory structure
+            if (q.includes('directory structure') || q.includes('folder structure') ||
+                q.includes('file organization') || (q.includes('directory') && q.includes('layout'))) {
+                return cloneToolKnowledge.directoryStructure;
+            }
+
+            // Troubleshooting
+            if (q.includes('troubleshoot') || q.includes('problem') || q.includes('not working') ||
+                q.includes('stuck') || q.includes('broken') || (q.includes('how') && q.includes('fix'))) {
+                return cloneToolKnowledge.troubleshooting;
+            }
+
+            // Best practices
+            if (q.includes('best practice') || q.includes('recommend') || q.includes('should i') ||
+                q.includes('workflow') || q.includes('how to use') || q.includes('getting started')) {
+                return cloneToolKnowledge.bestPractices;
+            }
+
+            // Limitations
+            if (q.includes('limitation') || q.includes('cannot') || q.includes('can\'t') ||
+                q.includes('does not') || q.includes('doesn\'t') || q.includes('not support') ||
+                (q.includes('what') && q.includes('cannot'))) {
+                return cloneToolKnowledge.limitations;
+            }
+
+            // Security
+            if (q.includes('security') || q.includes('secure') || q.includes('api key') ||
+                q.includes('safe') || q.includes('credential') || q.includes('permission')) {
+                return cloneToolKnowledge.security;
+            }
+
+            // Performance
+            if (q.includes('performance') || q.includes('speed') || q.includes('fast') ||
+                q.includes('slow') || q.includes('optimize') || q.includes('benchmark')) {
+                return cloneToolKnowledge.performance;
+            }
+
+            // Version history
+            if (q.includes('version') || q.includes('history') || q.includes('changelog') ||
+                q.includes('what changed') || q.includes('release') || q.includes('update')) {
+                return cloneToolKnowledge.versionHistory;
+            }
+
+            // What does this tool do?
+            if ((q.includes('what') && (q.includes('tool') || q.includes('do'))) ||
+                q.includes('purpose') || q.includes('use case')) {
+                return cloneToolKnowledge.purpose;
+            }
+
+            // Dry run
+            if (q.includes('dry run') || q.includes('dry-run') ||
+                (q.includes('test') && (q.includes('mode') || q.includes('without change')))) {
+                return cloneToolKnowledge.dryRun;
+            }
+
+            // API rate limits
+            if ((q.includes('api') || q.includes('request')) && (q.includes('rate') || q.includes('limit') || q.includes('throttle'))) {
+                return cloneToolKnowledge.apiRateLimit;
+            }
+
+            // How it works - technical details (workflow, process, step by step)
+            if ((q.includes('how') && (q.includes('work') || q.includes('technical') || q.includes('process'))) ||
+                q.includes('workflow') || q.includes('step by step') || q.includes('step-by-step') ||
+                (q.includes('explain') && (q.includes('work') || q.includes('process') || q.includes('technical') || q.includes('flow'))) ||
+                (q.includes('what') && q.includes('happen')) || q.includes('mechanism')) {
+                return cloneToolKnowledge.howItWorks;
+            }
+
+            // Duration/time - check for technical keywords
+            if (q.includes('long') || q.includes('time') || q.includes('duration') || q.includes('take')) {
+                // If question mentions technical terms or specific numbers, give technical answer
+                if (q.includes('technical') || q.includes('api') || q.includes('rate') ||
+                    q.includes('delay') || q.includes('400') || q.includes('300') ||
+                    q.includes('field') || q.includes('minute') || q.includes('second') ||
+                    /\d+/.test(q)) { // Contains numbers
+                    return cloneToolKnowledge.technicalDuration;
+                }
+                return cloneToolKnowledge.duration;
+            }
+
+            // Field type mapping
+            if (q.includes('field type') || q.includes('type mapping') || q.includes('field mapping') ||
+                (q.includes('field') && (q.includes('type') || q.includes('map'))) ||
+                q.includes('boolean') || q.includes('yes_or_no') || q.includes('single_user') ||
+                q.includes('rating')) {
+                return cloneToolKnowledge.fieldTypeMapping;
+            }
+
+            // Fields
+            if (q.includes('field') && !q.includes('type') && !q.includes('map')) {
+                return `Fields: ${cloneToolKnowledge.features.fields}`;
+            }
+
+            // Roles
+            if (q.includes('role')) {
+                return `Roles: ${cloneToolKnowledge.features.roles}`;
+            }
+
+            // Skills
+            if (q.includes('skill')) {
+                return `Skills: ${cloneToolKnowledge.features.skills}`;
+            }
+
+            // Templates
+            if (q.includes('template')) {
+                return `Templates: ${cloneToolKnowledge.features.templates}`;
+            }
+
+            // Automations
+            if (q.includes('automation') || q.includes('workflow') || q.includes('rule')) {
+                return `Automations: ${cloneToolKnowledge.features.automations}`;
+            }
+
+            // Timesheets
+            if (q.includes('timesheet')) {
+                return `Timesheets: ${cloneToolKnowledge.features.timesheets}`;
+            }
+
+            // Users
+            if (q.includes('user') && !q.includes('field')) {
+                return cloneToolKnowledge.users;
+            }
+
+            // Mapping files
+            if (q.includes('mapping') && (q.includes('file') || q.includes('json'))) {
+                return cloneToolKnowledge.mappingFiles;
+            }
+
+            // Customer directories
+            if (q.includes('directory') || q.includes('customer') || q.includes('organize')) {
+                return cloneToolKnowledge.customerDirectories;
+            }
+
+            // Safety
+            if (q.includes('safe') || q.includes('protect') || q.includes('security')) {
+                return cloneToolKnowledge.safety;
+            }
+
+            // How to use (but not technical workflow)
+            if (q.includes('how') && (q.includes('use') || q.includes('start') || q.includes('begin')) &&
+                !q.includes('work') && !q.includes('technical') && !q.includes('process')) {
+                return "To use the Clone Tool: 1) Fill in source portal details (URL and API key), 2) Fill in destination portal details, 3) Select which components to clone (Fields, Roles, Skills, etc.), 4) Check 'Dry Run Mode' for first run to test without changes, 5) Click 'Run Clone' and wait for completion. The tool will show real-time progress and generate mapping files.";
+            }
+
+            // Comprehensive fallback - try to match keywords and give relevant answer
+            const keywords = {
+                'feature': 'features',
+                'what can': 'features',
+                'capability': 'features',
+                'function': 'features',
+                'architecture': 'howItWorks',
+                'design': 'howItWorks',
+                'polling': 'howItWorks',
+                'background': 'howItWorks',
+                'thread': 'howItWorks',
+                'timeout': 'technicalDuration',
+                'browser': 'technicalDuration',
+                'wait': 'technicalDuration'
+            };
+
+            for (const [keyword, knowledgeKey] of Object.entries(keywords)) {
+                if (q.includes(keyword)) {
+                    if (knowledgeKey === 'features') {
+                        return `Key features: ${Object.entries(cloneToolKnowledge.features).map(([k, v]) => `${k.toUpperCase()}: ${v}`).join(' | ')}`;
+                    }
+                    return cloneToolKnowledge[knowledgeKey];
+                }
+            }
+
+            // Default response with comprehensive topics
+            return "I can help you with <strong>any question</strong> about the Rocketlane Clone Tool!<br><br><strong>📚 Knowledge Areas:</strong><ul><li><strong>Overview:</strong> purpose, features, workflow</li><li><strong>Technical:</strong> architecture, tech stack, innovation, file structure, API endpoints</li><li><strong>Configuration:</strong> properties file, feature flags, rate limits</li><li><strong>Components:</strong> fields, roles, skills, templates, automations, timesheets</li><li><strong>Advanced:</strong> dependencies, field sections, background processing, status monitoring</li><li><strong>Operations:</strong> dry run, incremental cloning, multi-customer, customer directories</li><li><strong>Troubleshooting:</strong> common problems, error handling, edge cases, solved issues</li><li><strong>Best Practices:</strong> workflows, security, performance, limitations</li><li><strong>Reference:</strong> mapping files, logging, directory structure, version history</li></ul><strong>Try asking about anything - I have comprehensive knowledge!</strong>";
+        }
+    </script>
+</body>
+</html>

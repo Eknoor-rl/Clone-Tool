@@ -1,0 +1,25 @@
+# Customer data and API keys — never commit these
+*.properties
+!template.properties
+customers/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Logs and migration outputs
+*.log
+migration_log*.json
+*_mapping.json
+migration_output*.txt
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
