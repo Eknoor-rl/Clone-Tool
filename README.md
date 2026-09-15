@@ -2,6 +2,12 @@
 
 A Python tool to migrate all data from one Rocketlane portal to another, including fields, roles, skills, users, templates, dependencies, automations, and timesheets.
 
+## Requirements
+
+- Python 3.9+
+- [uv](https://github.com/astral-ff/uv) package manager (for the CLI path)
+- Rocketlane API access for both the source and destination portals
+
 ## Two Ways to Run
 
 ### Option 1: Web UI (Recommended) 🌐
@@ -9,14 +15,21 @@ A Python tool to migrate all data from one Rocketlane portal to another, includi
 **No configuration files needed!** Run the web interface and enter portal details through your browser.
 
 ```bash
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies (Flask + requests)
+pip3 install -r requirements.txt
 
 # Start the web server
 python3 web_ui.py
 ```
 
 Then open your browser to **http://localhost:5000**
+
+Or use the launcher script, which installs dependencies if needed and starts the server:
+
+```bash
+./start_web_ui.sh        # macOS / Linux
+start_web_ui.bat         # Windows
+```
 
 **Features:**
 - ✅ Clean web interface
@@ -26,13 +39,22 @@ Then open your browser to **http://localhost:5000**
 - ✅ See migration results in real-time
 - ✅ Download mapping files directly
 
+> **Note:** Use `python3 web_ui.py` (not `uv run`) for the Web UI. Flask is listed in
+> `requirements.txt`, not in `pyproject.toml`, so install with `pip3 install -r requirements.txt`.
+
 ### Option 2: Command Line
 
 Use this method if you prefer terminal or need automation.
 
-#### 1. Update Portal Details
+#### 1. Create Your Config File
 
-Edit **[portal.properties](portal.properties)**:
+Copy the template and fill in your portal details:
+
+```bash
+cp template.properties portal.properties
+```
+
+Then edit **portal.properties**:
 
 ```properties
 # Source Portal
@@ -47,15 +69,21 @@ portal2.api.base=https://YOUR-PORTAL2.api.rocketlane.com
 portal2.api.key=rl-YOUR-PORTAL2-API-KEY
 ```
 
+`*.properties` files are git-ignored (except `template.properties`), so your API keys stay
+out of version control.
+
 #### 2. Run Migration
 
 ```bash
 # Test first (dry run)
-uv run python migrate_all_with_properties.py --dry-run
+uv run python migrate_all_with_properties.py --config portal.properties --dry-run
 
 # Run live migration
-uv run python migrate_all_with_properties.py
+uv run python migrate_all_with_properties.py --config portal.properties
 ```
+
+If you name your file exactly `portal.properties`, you can omit `--config` — that is the
+default the script looks for.
 
 ---
 
@@ -79,10 +107,9 @@ The tool migrates **8 types** of data in order:
 | File | Purpose |
 |------|---------|
 | **[web_ui.py](web_ui.py)** | **Web interface - run this for browser-based UI** |
-| **[portal.properties](portal.properties)** | **Configuration file for command-line usage** |
+| **[template.properties](template.properties)** | **Config template - copy to `portal.properties` for command-line usage** |
 | [migrate_all_with_properties.py](migrate_all_with_properties.py) | Main migration program (command-line) |
-| [properties_loader.py](properties_loader.py) | Loads configuration from portal.properties |
-| [analyze.py](analyze.py) | Analyzes migration logs |
+| [properties_loader.py](properties_loader.py) | Loads configuration from a `.properties` file |
 | [requirements.txt](requirements.txt) | Python dependencies |
 
 ### Web UI Files
@@ -91,15 +118,7 @@ The tool migrates **8 types** of data in order:
 |------|---------|
 | [templates/index.html](templates/index.html) | Web interface HTML template |
 | [static/style.css](static/style.css) | Web interface styles |
-
-### Documentation
-
-| File | Purpose |
-|------|---------|
-| **[QUICK_START_PROPERTIES.md](QUICK_START_PROPERTIES.md)** | **Quick start guide - start here!** |
-| [PROPERTIES_MIGRATION_GUIDE.md](PROPERTIES_MIGRATION_GUIDE.md) | Detailed migration guide |
-| [CONFIGURATION.md](CONFIGURATION.md) | Configuration reference |
-| [README.md](README.md) | This file |
+| [start_web_ui.sh](start_web_ui.sh) / [start_web_ui.bat](start_web_ui.bat) | Launcher scripts (install deps + start server) |
 
 ## Generated Files
 
@@ -117,9 +136,11 @@ automation_mapping.json         # Portal 1 ↔ Portal 2 automation IDs
 timesheet_mapping.json          # Timesheet configuration mappings
 ```
 
+These outputs are git-ignored.
+
 ## Features
 
-✅ **Single Configuration File** - Update portal.properties only
+✅ **Single Configuration File** - Update your `portal.properties` only
 ✅ **Complete Migration** - All 8 data types in one run
 ✅ **Automations Included** - Global automations migrated
 ✅ **Timesheets Included** - Full timesheet setup migrated
@@ -132,7 +153,7 @@ timesheet_mapping.json          # Timesheet configuration mappings
 
 ### Enable/Disable Migration Steps
 
-In [portal.properties](portal.properties):
+In your `portal.properties`:
 
 ```properties
 migration.enable.fields=true
@@ -197,28 +218,26 @@ POST /api/v1/timesheets/activity
 ### Basic Migration
 
 ```bash
-# Update portal.properties with your portal details
+# Create and edit your config
+cp template.properties portal.properties
 
 # Test with dry run
-uv run python migrate_all_with_properties.py --dry-run
+uv run python migrate_all_with_properties.py --config portal.properties --dry-run
 
 # Run live migration
-uv run python migrate_all_with_properties.py
+uv run python migrate_all_with_properties.py --config portal.properties
 ```
 
-### Using Custom Properties File
+### Using a Custom Properties File
 
 ```bash
-# Use a different properties file
+# Use a different properties file (e.g. per customer)
 uv run python migrate_all_with_properties.py --config my-portal.properties --dry-run
 ```
 
-### Analyze Results
+### Inspecting Results
 
 ```bash
-# Analyze migration logs
-uv run python analyze.py
-
 # Check specific mappings
 cat automation_mapping.json | jq '.total_mappings'
 cat timesheet_mapping.json | jq '.mappings'
@@ -229,52 +248,31 @@ cat timesheet_mapping.json | jq '.mappings'
 ### Issue: Properties file not found
 
 ```bash
-# Check you're in the right directory
-cd rocketlane-migrator
+# Check you're in the right directory and the file exists
 ls portal.properties
+
+# If missing, create it from the template
+cp template.properties portal.properties
 ```
 
 ### Issue: Authentication error
 
-Check API keys in portal.properties are correct:
+Check the API keys in your `portal.properties` are correct:
 - `portal1.api.key`
 - `portal1.automation.api.key`
 - `portal2.api.key`
 
 ### Issue: Some items not migrating
 
-1. Check feature flags in portal.properties
-2. Review migration_log.json for errors
+1. Check feature flags in your `portal.properties`
+2. Review `migration_log.json` for errors
 3. Verify permissions in Portal 2
-
-## Requirements
-
-- Python 3.9+
-- uv package manager
-- Rocketlane API access for both portals
-
-## Installation
-
-```bash
-# Clone or navigate to the directory
-cd rocketlane-migrator
-
-# Dependencies are managed by uv
-# They will be installed automatically when you run the script
-```
-
-## Support
-
-For detailed information, see:
-- **[QUICK_START_PROPERTIES.md](QUICK_START_PROPERTIES.md)** - Quick start guide
-- **[PROPERTIES_MIGRATION_GUIDE.md](PROPERTIES_MIGRATION_GUIDE.md)** - Detailed guide
-- **[CONFIGURATION.md](CONFIGURATION.md)** - Configuration reference
 
 ## Summary
 
-1. **Update** [portal.properties](portal.properties) with your portal URLs and API keys
-2. **Run** `uv run python migrate_all_with_properties.py --dry-run` to test
-3. **Run** `uv run python migrate_all_with_properties.py` for live migration
-4. **Check** mapping files for ID mappings and migration_log.json for any errors
+1. **Copy** `template.properties` to `portal.properties` and fill in your portal URLs and API keys
+2. **Run** `uv run python migrate_all_with_properties.py --config portal.properties --dry-run` to test
+3. **Run** `uv run python migrate_all_with_properties.py --config portal.properties` for live migration
+4. **Check** the mapping files for ID mappings and `migration_log.json` for any errors
 
 All 8 data types (fields, roles, skills, users, templates, dependencies, automations, timesheets) are migrated automatically!
